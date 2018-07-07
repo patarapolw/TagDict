@@ -38,7 +38,11 @@ class TagDict:
                 self.tags.setdefault(tag.lower(), []).append(front)
 
     def save(self):
-        pyexcel.save_as(records=list(self.entries.values()), dest_file_name=self.filename)
+        pyexcel.save_as(
+            records=list(self.entries.values()),
+            dest_file_name=self.filename,
+            dest_sheet_name='TagDict'
+        )
 
     def add(self, keyword: str, data='', additional_keywords: iter=None, tags: iter=None):
         if additional_keywords is None:
@@ -48,7 +52,7 @@ class TagDict:
 
         keywords = set()
         keywords.add(keyword)
-        keywords.update(additional_keywords)
+        # keywords.update(additional_keywords)
 
         for word in keywords:
             if word.lower() in self.keywords.keys():
@@ -59,7 +63,8 @@ class TagDict:
                 back += data
 
                 self.update(front, data=back, additional_keywords=additional_keywords, tags=tags)
-                return
+
+                return self._view_entries(self.entries[front])
 
         front = keyword.lower()
 
@@ -77,7 +82,7 @@ class TagDict:
         for tag in self.tags:
             self.tags.setdefault(tag.lower(), []).append(front)
 
-        return 'Added'
+        return self._view_entries(self.entries[front])
 
     def update(self, keyword: str, data: str=None, additional_keywords: iter=None, tags: iter=None):
         if additional_keywords is None:
@@ -103,7 +108,7 @@ class TagDict:
         for tag in self.tags:
             self.tags.setdefault(tag.lower(), []).append(front)
 
-        return 'Updated'
+        return self._view_entries(self.entries[front])
 
     def remove(self, keyword: str):
         front = self.keywords[keyword.lower()]
@@ -128,6 +133,8 @@ class TagDict:
         for k in to_pop:
             self.tags.pop(k)
 
+        return 'Removed'
+
     def find(self, keyword_regex: str='', tags: list=None):
         if tags is None:
             tags = list()
@@ -147,7 +154,30 @@ class TagDict:
              file_format='handsontable', filename='me', width=800, height=300):
         pyexcel.save_as(
             records=list(self.find(keyword_regex, tags)),
-            dest_file_name='{}.{}.html'.format(filename, file_format)
+            dest_file_name='{}.{}.html'.format(filename, file_format),
+            dest_sheet_name='TagDict'
+        )
+        return IFrame('{}.{}.html'.format(filename, file_format), width=width, height=height)
+
+    @staticmethod
+    def _view_entries(entries,
+                      file_format='handsontable', filename='me', width=800, height=150):
+        """
+
+        :param dict|OrderedDict|iter entries:
+        :param file_format:
+        :param filename:
+        :param width:
+        :param height:
+        :return:
+        """
+        if isinstance(entries, (dict, OrderedDict)):
+            entries = [entries]
+
+        pyexcel.save_as(
+            records=list(entries),
+            dest_file_name='{}.{}.html'.format(filename, file_format),
+            dest_sheet_name='TagDict'
         )
         return IFrame('{}.{}.html'.format(filename, file_format), width=width, height=height)
 
