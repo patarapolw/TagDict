@@ -23,19 +23,22 @@ class TagDict:
         self.keywords = dict()
         self.tags = dict()
 
-        for raw_entry in pyexcel.iget_records(file_name=self.filename):
-            front = raw_entry['Front'].lower()
+        try:
+            for raw_entry in pyexcel.iget_records(file_name=self.filename):
+                front = raw_entry['Front'].lower()
 
-            if front == '':
-                break
-            self.entries[front] = raw_entry
+                if front == '':
+                    break
+                self.entries[front] = raw_entry
 
-            self.keywords[front] = front
-            for keyword in tag_reader(raw_entry['Additional keywords']):
-                self.keywords[keyword.lower()] = front
+                self.keywords[front] = front
+                for keyword in tag_reader(raw_entry['Additional keywords']):
+                    self.keywords[keyword.lower()] = front
 
-            for tag in tag_reader(raw_entry['Tags']):
-                self.tags.setdefault(tag.lower(), []).append(front)
+                for tag in tag_reader(raw_entry['Tags']):
+                    self.tags.setdefault(tag.lower(), []).append(front)
+        except FileNotFoundError:
+            pass
 
     def save(self):
         pyexcel.save_as(
