@@ -1,16 +1,20 @@
 [tool.poetry]
-name = "tagdict"
+name = "TagDict"
 version = "0.1.0"
 description = "Let's create a taggable dictionary..."
 authors = ["Pacharapol Withayasakpunt <patarapolw@gmail.com>"]
 license = "Apache-2.0"
+readme = "README.md"
+repository = "https://github.com/patarapolw/TagDict"
+homepage = "https://github.com/patarapolw/TagDict"
+keywords = ['dictionary', 'dictionary-learning', 'tagging', 'jupyter-notebook']
 
 [tool.poetry.dependencies]
 python = ">=3"
 jupyter = "^1.0"
+notebook = "^5.5"
 pyexcel = "^0.5.8"
 pyexcel-handsontable = "^0.0.1"
-notebook = "^5.5"
 pyexcel-ods = "^0.5.3"
 pyexcel-xls = "^0.5.7"
 
