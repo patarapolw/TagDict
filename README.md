@@ -26,4 +26,4 @@ An updated table about 'glioblastoma' is shown.
 
 ## Screenshots
 
-<img src="https://github.com/patarapolw/TagDict/tree/master/screenshots/0.png">
+<img src="https://raw.githubusercontent.com/patarapolw/TagDict/master/screenshots/0.png">
