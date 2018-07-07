@@ -2,7 +2,7 @@
 
 Let's create a taggable dictionary...
 
-This project is based on `jupyter notebook` to view and edit `*.xls` and `*.ods` files.
+This project is based on `jupyter notebook` to view and edit `*.xlsx` and `*.ods` files.
 
 I intend to create a comprehensive medical dictionary, which is searchable by tags and regex; and convertible to flashcards for apps like Anki, Memrise or Kitsun.io
 
