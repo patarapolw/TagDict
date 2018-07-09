@@ -31,12 +31,12 @@ class TagDict:
                     break
                 self.entries[front] = raw_entry
 
-                self.keywords[front] = front
+                self.keywords.setdefault(front, set()).add(front)
                 for keyword in tag_reader(raw_entry['Additional keywords']):
-                    self.keywords[keyword.lower()] = front
+                    self.keywords.setdefault(keyword.lower(), set()).add(front)
 
                 for tag in tag_reader(raw_entry['Tags']):
-                    self.tags.setdefault(tag.lower(), []).append(front)
+                    self.tags.setdefault(tag.lower(), set()).add(front)
         except FileNotFoundError:
             pass
 
@@ -47,53 +47,51 @@ class TagDict:
             dest_sheet_name='TagDict'
         )
 
-    def add(self, keyword: str, data='', additional_keywords: iter=None, tags: iter=None):
+    def add(self, front: str, data='', additional_keywords: iter=None, tags: iter=None):
         if additional_keywords is None:
             additional_keywords = list()
         if tags is None:
             tags = list()
 
-        keywords = set()
-        keywords.add(keyword)
-        # keywords.update(additional_keywords)
+        front = front.lower()
 
-        for word in keywords:
-            if word.lower() in self.keywords.keys():
-                front = self.keywords[word.lower()]
-                back = self.entries[front]['Back']
-                if len(back) > 0 and back[-1] != '\n':
-                    back += '\n'
-                back += data
+        if front in self.entries.keys():
+            back = self.entries[front]['Back']
+            if len(back) > 0 and back[-1] != '\n':
+                back += '\n'
+            back += data
 
-                self.update(front, data=back, additional_keywords=additional_keywords, tags=tags)
+            self.update(front, data=back, additional_keywords=additional_keywords, tags=tags)
 
-                return self._view_entries(self.entries[front])
+            return self._view_entries(self.entries[front])
+        else:
+            self.entries[front] = OrderedDict({
+                'Front': front,
+                'Back': data,
+                'Additional keywords': to_raw_tags(additional_keywords),
+                'Tags': to_raw_tags(tags)
+            })
+            self.save()
 
-        front = keyword.lower()
+            keywords = set()
+            keywords.add(front)
+            keywords.update(additional_keywords)
 
-        self.entries[front] = OrderedDict({
-            'Front': front,
-            'Back': data,
-            'Additional keywords': to_raw_tags(additional_keywords),
-            'Tags': to_raw_tags(tags)
-        })
-        self.save()
+            for keyword in keywords:
+                self.keywords.setdefault(keyword.lower(), set()).add(front)
 
-        for keyword in keywords:
-            self.keywords[keyword.lower()] = front
+            for tag in self.tags:
+                self.tags.setdefault(tag.lower(), set()).add(front)
 
-        for tag in self.tags:
-            self.tags.setdefault(tag.lower(), []).append(front)
+            return self._view_entries(self.entries[front])
 
-        return self._view_entries(self.entries[front])
-
-    def update(self, keyword: str, data: str=None, additional_keywords: iter=None, tags: iter=None):
+    def update(self, front: str, data: str=None, additional_keywords: iter=None, tags: iter=None):
         if additional_keywords is None:
             additional_keywords = list()
         if tags is None:
             tags = list()
 
-        front = self.keywords[keyword.lower()]
+        front = front.lower()
         if data is not None:
             self.entries[front]['Back'] = data
 
@@ -106,33 +104,32 @@ class TagDict:
         self.save()
 
         for keyword in additional_keywords:
-            self.keywords[keyword.lower()] = front
+            self.keywords.setdefault(keyword.lower(), set()).add(front)
 
-        for tag in self.tags:
-            self.tags.setdefault(tag.lower(), []).append(front)
+        for tag in tags:
+            self.tags.setdefault(tag.lower(), set()).add(front)
 
         return self._view_entries(self.entries[front])
 
-    def remove(self, keyword: str):
-        front = self.keywords[keyword.lower()]
+    def remove(self, front: str):
         self.entries.pop(front)
         self.save()
 
         to_pop = []
         for k, v in self.keywords.items():
-            if v == keyword:
+            if front in v:
+                self.keywords[k].remove(front)
+            if len(self.keywords[k]) == 0:
                 to_pop.append(k)
-
         for k in to_pop:
             self.keywords.pop(k)
 
         to_pop = []
         for k, v in self.tags.items():
-            if keyword in v:
-                self.tags[k].remove(keyword)
+            if front in v:
+                self.tags[k].remove(front)
             if len(self.tags[k]) == 0:
                 to_pop.append(k)
-
         for k in to_pop:
             self.tags.pop(k)
 
@@ -143,9 +140,10 @@ class TagDict:
             tags = list()
 
         matched_entries = set()
-        for word, front in self.keywords.items():
-            if re.search(keyword_regex, word, flags=re.IGNORECASE):
-                matched_entries.add(front)
+        for word, fronts in self.keywords.items():
+            for front in fronts:
+                if re.search(keyword_regex, word, flags=re.IGNORECASE):
+                    matched_entries.add(front)
 
         for entry in matched_entries:
             if len(tags) == 0:
