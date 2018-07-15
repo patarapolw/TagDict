@@ -463,7 +463,7 @@ name = "pyexcel-export"
 optional = false
 platform = "*"
 python-versions = ">=3"
-version = "0.2.2"
+version = "0.2.5"
 
 [package.dependencies]
 openpyxl = ">=2.5,<3.0"
@@ -731,7 +731,7 @@ python-versions = "*"
 version = "1.3.0"
 
 [metadata]
-content-hash = "8aa320b54f2b89579fa431422ac3ece6168a7c6355e372d4f88e197567b05a64"
+content-hash = "acc972fef12a30f469ef142e006c648babad46a623b7060d58c099ce1b272275"
 platform = "*"
 python-versions = ">=3"
 
@@ -771,7 +771,7 @@ prometheus-client = ["69494dc1ac967c0f626c8193e439755c2b95dd4ed22ef31c277601778a
 prompt-toolkit = ["1df952620eccb399c53ebb359cc7d9a8d3a9538cb34c5a1344bdbeb29fbcc381", "3f473ae040ddaa52b52f97f6b4a493cfa9f5920c255a12dc56a7d34397a398a4", "858588f1983ca497f1cf4ffde01d978a3ea02b01c8a26a8bbc5cd2e66d816917"]
 ptyprocess = ["923f299cc5ad920c68f2bc0bc98b75b9f838b93b599941a6b63ddbc2476394c0", "d7cc528d76e76342423ca640335bd3633420dc1366f258cb31d05e865ef5ca1f"]
 pyexcel = ["4c470a7059d54e1c24112008a3410d1ff16d65fc47fa32a87d9581f1d92db11e", "7554b140729eaa679c0d627d5a44c787cd7216a917fa61f3da9f6b91438c9d43"]
-pyexcel-export = ["2167978379be51728c731b6fba8b794ddb755c6c94a48ed9f183d2d084011965", "f6f1cb167b62ded84b2564d800a889a947f34aafd5e4bde82d55a14556662483"]
+pyexcel-export = ["c6c2abaa58eeb25dcbf87bc2c6f9cdd56f744762e6eeadb87dfd3ee13a5121f7", "ff5ffab8f39fddd3de384bba161ea19bc8c4e1e370699854ba36966f5b3f6194"]
 pyexcel-handsontable = ["5d86cdcce942b8a351b6b147d312d54deb07a0e63b33275fa20de72efde75362", "f6f3e6fcd97610db676a0f3d6030897247ca615245e747acae79f7b92314db09"]
 pyexcel-io = ["5cf5ccf7750ca130640277f31178b6284a4f9f0f0d1d41f28f419b67ce26132b", "d0639851fce803c772ccf0b8ec975f212cb64b6681b63d67e89a2ea238c0afdb"]
 pyexcel-xls = ["60bba3e80a0aa6af62f8d8a0fdff292b2acba14c047374611986ae572c430a98", "6fed6e1beffb0a612602da62d80ebde71b645538021201018e564db9096fe67f"]
