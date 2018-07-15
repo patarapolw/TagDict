@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "TagDict"
-version = "0.2.0"
+version = "0.3.0"
 description = "Let's create a taggable dictionary..."
 authors = ["Pacharapol Withayasakpunt <patarapolw@gmail.com>"]
 license = "Apache-2.0"
@@ -15,7 +15,7 @@ jupyter = "^1.0"
 notebook = "^5.5"
 pyexcel = "^0.5.8"
 pyexcel-handsontable = "^0.0.1"
-pyexcel-ods = "^0.5.3"
 pyexcel-xls = "^0.5.7"
+pyexcel-export = "^0.2.2"
 
 [tool.poetry.dev-dependencies]

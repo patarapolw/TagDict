@@ -1,4 +1,5 @@
 import pyexcel
+import pyexcel_export
 import re
 from collections import OrderedDict
 from IPython.display import IFrame
@@ -11,9 +12,9 @@ class TagDict:
         """
 
         :param str filename:
-        >>> len(TagDict('../user/PathoDict.ods').keywords)
+        >>> len(TagDict('../user/PathoDict.xlsx').keywords)
         35
-        >>> len(TagDict('../user/PathoDict.ods').tags)
+        >>> len(TagDict('../user/PathoDict.xlsx').tags)
         1
         """
         self.filename = filename
@@ -24,7 +25,7 @@ class TagDict:
         self.tags = dict()
 
         try:
-            for raw_entry in pyexcel.iget_records(file_name=self.filename):
+            for raw_entry in pyexcel.iget_records(file_name=self.filename, sheet_name='TagDict'):
                 front = raw_entry['Front'].lower()
 
                 if front == '':
@@ -41,11 +42,22 @@ class TagDict:
             pass
 
     def save(self):
-        pyexcel.save_as(
-            records=list(self.entries.values()),
-            dest_file_name=self.filename,
-            dest_sheet_name='TagDict'
-        )
+        data = OrderedDict()
+        data['TagDict'] = []
+
+        data['TagDict'].append(list(list(self.entries.values())[0].keys()))
+
+        assert data['TagDict'][0] == ['Front', 'Back', 'Additional keywords', 'Tags']
+
+        for entry in self.entries.values():
+            data['TagDict'].append(list(entry.values()))
+
+        for matrix in data['TagDict']:
+            for row in matrix:
+                for cell in row:
+                    assert isinstance(cell, (int, str, bool))
+
+        pyexcel_export.save_data(self.filename, data)
 
     def add(self, front: str, data='', additional_keywords: iter=None, tags: iter=None):
         if additional_keywords is None:
