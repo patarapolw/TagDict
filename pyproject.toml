@@ -19,3 +19,6 @@ pyexcel-xls = "^0.5.7"
 pyexcel-export = "^0.3.0"
 
 [tool.poetry.dev-dependencies]
+pyqt5 = "^5.11"
+
+
