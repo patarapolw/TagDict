@@ -18,6 +18,7 @@ class TagDict:
         1
         """
         self.filename = filename
+        self.meta = pyexcel_export.get_meta(filename)
 
         # Don't forget to update 3 entries at a time!!!
         self.entries = OrderedDict()
@@ -57,7 +58,7 @@ class TagDict:
                 for cell in row:
                     assert isinstance(cell, (int, str, bool))
 
-        pyexcel_export.save_data(self.filename, data)
+        pyexcel_export.save_data(self.filename, data, meta=self.meta)
 
     def add(self, front: str, data='', additional_keywords: iter=None, tags: iter=None):
         if additional_keywords is None:
