@@ -1,5 +1,7 @@
 # TagDict
 
+**This project is becoming obsolete. Please consider using [jupyter-flashcards](https://github.com/patarapolw/jupyter-flashcards) instead.**
+
 Let's create a taggable dictionary...
 
 This project is based on `jupyter notebook` to view and edit `*.xlsx` and `*.ods` files.
