@@ -4,7 +4,8 @@ import re
 from collections import OrderedDict
 from IPython.display import IFrame
 
-from TagDict.tags import tag_reader, to_raw_tags
+from .tags import tag_reader, to_raw_tags
+from .dir import module_path
 
 
 class TagDict:
@@ -169,7 +170,9 @@ class TagDict:
         pyexcel.save_as(
             records=list(self.find(keyword_regex, tags)),
             dest_file_name='{}.{}.html'.format(filename, file_format),
-            dest_sheet_name='TagDict'
+            dest_sheet_name='TagDict',
+            js_url=module_path('handsontable.full.min.js'),
+            css_url=module_path('handsontable.full.min.css')
         )
         return IFrame('{}.{}.html'.format(filename, file_format), width=width, height=height)
 
@@ -191,7 +194,9 @@ class TagDict:
         pyexcel.save_as(
             records=list(entries),
             dest_file_name='{}.{}.html'.format(filename, file_format),
-            dest_sheet_name='TagDict'
+            dest_sheet_name='TagDict',
+            js_url=module_path('handsontable.full.min.js'),
+            css_url=module_path('handsontable.full.min.css')
         )
         return IFrame('{}.{}.html'.format(filename, file_format), width=width, height=height)
 
